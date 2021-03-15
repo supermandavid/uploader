@@ -3,7 +3,6 @@
 
 const electron = require('electron')
 const path = require('path')
-const axios = require('axios')
 const os = require('os')
 const fs = require("fs");
 
@@ -163,14 +162,6 @@ function togglemute() {
 
 
 
-function webGet(url) {
-    axios.get(url)
-        .then(res => {
-
-        })
-}
-
-
 function gotoRoute() {
     const mPath = path.join('file://', __dirname, '.html')
     let win = new BrowserWindow({ width: 600, height: 500, frame: false, alwaysOnTop: true, transparent: true })
@@ -242,6 +233,7 @@ function thumbSelected(input) {
 //used from html
 function videoSelected(input) {
     // alert('video selected')
+    console.log(ffprobe.path, ffprobe.version);
     if (input.files == null) return
     const name = input.files.item(0).name;
     const size = input.files.item(0).size;
@@ -271,12 +263,10 @@ function setProgressActive(index, state) {
 
 function updateProgressUI() {
 
-
     for (const [key, element] of Object.entries(progressData)) {
         let i = element[0]
         let done = element[1]
         let active = element[2]
-
 
 
         if (!done) {
