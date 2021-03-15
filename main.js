@@ -75,11 +75,11 @@ app.on('window-all-closed', () => {
   }
 })
 
-app.on('activate', () => {
+/*app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
-})
+})*/
 
 ipc.on('signup-state', function (event, arg ) {
     win.webContents.send('sign-state ', argcl)

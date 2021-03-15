@@ -1,6 +1,3 @@
-//ToDo: refactor code into classes and modules
-//speed coded please forgive the big mess :)
-
 const electron = require('electron')
 const path = require('path')
 const os = require('os')
@@ -18,8 +15,14 @@ var videoPlayerId = 'plyrele'
 var ajax = new AjaxRequest()
 var cookieBar = new Cookie1()
 
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-const ffprobePath = require('@ffprobe-installer/ffprobe').path;
+
+const ffprobePath = require('@ffprobe-installer/ffprobe').path
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
+
+console.log('the paths are below')
+console.log(ffprobePath)
+console.log(ffmpegPath)
+
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
@@ -28,7 +31,7 @@ ffmpeg.setFfprobePath(ffprobePath);
 var currentVideoData = null
 var videoSelectedState = false
 var imageSelectedState = false
-var imageBase64String = null
+var imageBase64String = null 
 var muted = false
 var firstPlay = false
 var inputSuspended = false;
@@ -233,7 +236,6 @@ function thumbSelected(input) {
 //used from html
 function videoSelected(input) {
     // alert('video selected')
-    console.log(ffprobe.path, ffprobe.version);
     if (input.files == null) return
     const name = input.files.item(0).name;
     const size = input.files.item(0).size;
@@ -417,7 +419,8 @@ function registerVideo(filepath) {
 }
 
 function startTranscodeProcess(params) {
-
+    console.log('the file dir is ')
+    console.log(currentVideoData.fileDir)
     ffmpeg.ffprobe(currentVideoData.fileDir, (err, metaData) => {
         currentVideoData.duration = Math.ceil(metaData.format.duration)
 
@@ -436,12 +439,15 @@ function startTranscodeProcess(params) {
     })
 }
 
-function transcodeVideo(path) {
+function transcodeVideo() {
 
 
     var proc = new ffmpeg()
-    console.log(currentVideoData.transcodePath)
+   
+    //const transpath = currentVideoData.transcodePath.replace(/(\s+)/g, '\\$1')
+    const transpath = currentVideoData.transcodePath
 
+    console.log(transpath)
     proc.addInput(currentVideoData.fileDir).outputOptions([
         "-preset slow",
         "-keyint_min 100",
@@ -476,16 +482,17 @@ function transcodeVideo(path) {
         "-hls_playlist_type vod",
         "-hls_flags independent_segments",
         "-master_pl_name playback.m3u8",
-        "-hls_segment_filename", currentVideoData.transcodePath + "/s_%v_%06d.ts",
+        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts") +" ",
         "-strftime_mkdir 1",
         "-var_stream_map", "v:0,a:0 v:1,a:1 v:2,a:2"
-    ]).output(currentVideoData.transcodePath + '/stream_%v.m3u8')
+    ]).output(path.join(transpath, 'stream_%v.m3u8'))
         .on('start', function (commandLine) {
             isTranscoding = true
             actionButton.disabled = true
 
         })
         .on('error', function (err, stdout, stderr) {
+            console.log('---------------')
             console.log(err)
             console.log(stdout)
             console.log(stderr)

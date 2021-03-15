@@ -1,5 +1,5 @@
 {
-  "name": "transcoder",
+  "name": "uploader",
   "version": "1.0.0",
   "description": "Video Transcoder App",
   "main": "main.js",
@@ -18,9 +18,8 @@
   "author": "alexdacoda",
   "license": "ISC",
   "devDependencies": {
-    "electron": "11.2.1",
-    "electron-packager": "^15.2.0",
-    "electron-winstaller": "^5.0.0"
+    "electron": "11.3.0",
+    "electron-packager": "^15.2.0"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
