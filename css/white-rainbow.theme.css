@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&family=Roboto:wght@400;500;700&family=Ubuntu:wght@500;700&display=swap');
+
+body{
+	margin:0;
+}
+.dark{
+	background-color: #313942;/* main dark C*/
+	color: #fff;
+	color: rgba(255,255,255,.8);
+}
+.darker{
+	background-color: #25292a;/* secondary darker C*/
+}
+.light{
+	background-color: #f0f1f6; /*main light C*/
+}
+.accent, .accent1{
+	background-color: #4361EE;/*main accent C*/
+	fill: #4361EE;
+	color: #fff;
+}
+.accent .dt{
+	color: #fff;
+}
+.accent .lightT{
+	color:#c3cbd6
+}
+.accentSdw{
+	box-shadow: #4361EE;
+}.accent
+.accentb{
+	border-color: #009cdf;/*main accent C*/
+}
+.lightB{
+	border-color: #e2e5f0;
+}
+/* default border color */
+.def_b_c{
+	border-color: turquoise;
+}
+.accent2, .activeacc2{
+	background-color: #6f8294;/*main accent2 C*/
+	fill: #6f8294;
+	color: #fff;
+}
+.accent2T{
+	color:#6f8294;/*main accent2 C*/
+}
+.hovacc2:hover{
+	background-color: #6f8294;/*main accent2 C*/
+	fill: #6f8294;
+	color: #fff;
+}
+
+.accent3{
+	background-color: #42a4c8;/*main accent C*/
+	fill: #42a4c8;
+	color: #fff;
+}
+.f1{
+	font-family: 'poppins', Century Gothic,CenturyGothic,AppleGothic, sans-serif;
+
+}
+.f2{
+	font-family: 'Ubuntu', Geneva, Tahoma, Verdana, sans-serif;
+}
+
+.f3{
+	font-family: 'roboto', Verdana, sans-serif;
+}
+.w2{
+	font-weight: 200;
+}
+.w8{
+	font-weight: 800;
+}
+
+
+/* this is the text color in accent 1*/
+.accentT, .accent1T{
+	color: #4361EE!important;/*main accent color for text*/
+}
+.accTbf::after, .accTbf::before{
+	background-color: #4361EE;/*main accent color for text*/
+}
+
+.activeC{
+	background-color: #009cdf!important;/*main accent C*/
+	color: #fff;
+}
+
+.lightT{
+	color: #a4a8b5;
+}
+/*this is the light highlighted state of an item*/
+.lightHighlight{
+	background-color: #eff3f6; /*main light C*/
+	color: rgba(255,255,255,.8);
+	color: #333!important;
+}
+
+.lightHighlight .svgIcon path{
+	fill:  #009cdf!important;/*main accent C*/
+}
+.lightHighlight{
+	border-color: #009cdf!important;/*main accent C*/
+}
+.greenT{
+	color: #30cc8b;
+}
+.redT{
+	color:red;
+}
+
+.bg{
+    background-color: #fffdf6;
+}
+.wbg{
+	background-color: #fdfdff;
+}
+.lbg{
+	background-color: #f5f6f9;
+}
+
+.dt{
+	color:#2f354e;
+}
+
+.gt{
+	color:#15B097;
+}
+.gbf::after, .gbf::before{
+	background-color: #15B097;
+}
+
+
+
+
+.redTb, .c_a, .c_f, .c_g, .c_p, .c_n{
+	color: #ea6278!important;
+	background-color: #fbdbf3!important;
+}
+.blueTb, .c_t, .c_c, .c_j, .c_l, .c_z, .c_x{
+	color: #376ae9;
+	background-color: #dee9ff;
+}
+.greenTb, .c_m, .c_q, .c_e, .c_k, .c_r{
+	color: #30ccc1 ;
+	background-color: #d4f3ee;
+}
+.purpleTb, .c_i, .c_w, .c_d, .c_o, .c_v{
+	color: #693aea;
+	background-color: #e5dcf9;
+}
+.yellowTb, .c_s, .c_b, .c_h, .c_y, .c_u{
+	color: #d7b118;
+	background-color: #fbf0a8;
+}
+
+.redTb svg, .c_a svg, .c_f svg, .c_g svg, .c_p svg, .c_n svg{
+	fill: #ea6278;
+	stroke: #fbdbf3;
+}
+.blueTb svg, .c_t svg, .c_c svg, .c_j svg, .c_l svg, .c_z svg, .c_x svg{
+	fill: #376ae9;
+	stroke: #dee9ff;
+}
+
+.redback{
+	background-color: #fbdbf3;
+}
+.blueback{
+	background-color: #dee9ff;
+}
+.greenback{
+ 	background-color: #d4f3ee;
+}
+.purpleback{
+	background-color: #e5dcf9;
+}
+.yellowback{
+	background-color: #fbf0a8;
+}
+
+
+.redAcnt{
+	background-color: #f56161!important;
+	color:#fff;
+}
+
+/*font size*/
+.fs10{
+	font-size: 10px;
+}
+
+.fs12{
+	font-size: 12px;
+}
+
+.fs22{
+	font-size: 22px;
+}
+
+

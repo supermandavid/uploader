@@ -1,0 +1,32 @@
+{
+  "name": "transcoder",
+  "version": "1.0.0",
+  "description": "Video Transcoder App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package-mac": "electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --icon=img/icons/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --asar --platform=win32 --arch=x64 --icon=img/icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=alexdacoda --version-string.FileDescription=video transcoder for the web --version-string.ProductName=\"Video Transoder\"",
+    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=img/icons/icon.ico --prune=true --out=release-builds",
+    "create-installer-mac": "electron-installer-dmg ./release-builds/Video\\ Transcoder\\ app-darwin-x64/Video\\ Transcoder\\ app.app video-transoder-app --out=release-builds --overwrite --icon=img/icons/icon.icns",
+    "create-installer-win": "node installers/windows/createinstaller.js"
+  },
+  "keywords": [
+    "Video",
+    "Transcoder"
+  ],
+  "author": "alexdacoda",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "11.2.1",
+    "electron-winstaller": "^5.0.0"
+  },
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "@ffprobe-installer/ffprobe": "^1.1.0",
+    "archiver": "^5.3.0",
+    "axios": "^0.21.1",
+    "electron-reload": "^1.5.0",
+    "fluent-ffmpeg": "^2.1.2"
+  }
+}

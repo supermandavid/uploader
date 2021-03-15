@@ -1,0 +1,256 @@
+	.cookie1_cntcont{
+		position: relative;
+		vertical-align: top;
+		top: 50%;
+	transform: translate(-0%, -50%);
+	}
+	.cookie1{
+		background-color: rgb(50,50,50);
+		position: fixed;
+		z-index: 9000;
+		bottom: 20px;
+		height: 60px;
+		width: 500px;
+		font-size: 0;
+		box-sizing: border-box;
+		padding-right: 40px;
+		padding-left: 15px;
+	}
+	.cookieopen1{
+		left: -500px;
+		animation-name: slide_left_open;
+		animation-duration: .5s;
+		animation-timing-function: ease-out;
+		animation-fill-mode: forwards;
+		-webkit-animation-duration: .5s;
+		-webkit-animation-timing-function: ease-out;
+		-webkit-animation-fill-mode: forwards;
+	}
+	.cookiecloseCookie1{
+		left: -500px;
+		animation-name: slide_right_closeCookie;
+		animation-duration: .2s;
+		animation-timing-function: ease-out;
+		animation-fill-mode: forwards;
+		-webkit-animation-duration: .5s;
+		-webkit-animation-timing-function: ease-out;
+		-webkit-animation-fill-mode: forwards;
+	}
+	.cookie1_msg{
+		color: #fff;
+		display: inline-block;
+		font-size: 14px;
+		font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+		font-weight: 100;
+	}
+	.cookie1_action{
+		position: relative;
+		display: inline-block;
+		font-size: 14px;
+		color: rgb(161,194,249);
+		text-align: center;
+		font-family: Verdana, Geneva, sans-serif;
+		text-transform: uppercase;
+		cursor: pointer;
+		border-radius: 4px;
+		padding-top: 3px;
+		padding-bottom: 3px;
+		transition: .3s ease 0s all;
+	}
+	.cookie1_action:hover{
+		background-color:rgba(255,255,255,.9);
+		color: rgba(50,50,50,1);
+	}
+	.cookie1_action:active{
+		background-color:rgba(255,255,255,.6);
+	}
+	.cookie1_progressCir{
+		background-color: transparent;
+		border-radius: 100%;
+
+		animation-name: throb_rotate;
+		animation-duration: .5s;
+		animation-timing-function: ease-out;
+		animation-fill-mode: forwards;
+		animation-iteration-count:  infinite;
+		-webkit-animation-iteration-count:  infinite;
+		-webkit-animation-duration: .5s;
+		-webkit-animation-timing-function: ease-out;
+		-webkit-animation-fill-mode: forwards;
+	}
+
+	@-webkit-keyframes throb_rotate{
+	0%{transform: rotate(0deg);}
+	100%{transform: rotate(360deg);}  
+}
+@keyframes throb_rotate{
+	0%{transform: rotate(0deg);}
+	100%{transform: rotate(360deg);}  
+
+}
+
+	.cookie1_spinner_cont{
+		font-size: 0;
+	}
+	.cookie1_spinner_cont:hover{
+		background-color: transparent;
+	}
+	.cookie1_spinner_done{
+		color: #f90;
+	}
+	.cookie1_spinner_done:hover{
+		background-color: transparent;
+		color: #f90;
+	}
+	.cookie1_spinner_done .cookie1_progressCir{
+		display: none;
+	}
+
+	
+	.cookie1_xbtn{
+		position: absolute;
+	}
+	.xSign{
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	right:10px;
+	padding: 3px;
+	opacity: .7;
+	border-radius: 3px;
+	font-size: 0;
+}
+
+.cookie1 .xcomp{
+	position: relative;
+	width: 15px;
+	height: 2px;
+	background-color: #fff;
+}
+.x1{
+	transform: rotate(45deg);
+	top: 9px;
+	left: 2px;
+
+}
+.x2{
+	transform: rotate(135deg);
+	top: 7px;
+	left: 2px;
+
+
+}
+button[class ~= 'cookie1_xbtn']{
+	background-color: transparent;
+	border:none;
+	outline: none;
+}
+button[class ~= 'cookie1_xbtn'] .x1{
+	top: 1px;
+	left: -1px;
+}
+button[class ~= 'cookie1_xbtn'] .x2{
+	top: -1px;
+	left: -1px;
+}
+button[class ~= 'cookie1_xbtn']:active{
+	background-color: transparent;
+
+}
+.xSign:hover{
+	background-color: rgba(255,255,255,.3);
+}
+
+.cookie1_opt_1opt .cookie1_msg{
+	width: 86%;
+
+}
+.cookie1_opt_1opt .cookie1_action{
+	width: 14%;
+}
+.cookie1_opt_2opt .cookie1_msg{
+	width: 70%;
+
+}
+.cookie1_opt_2opt .cookie1_action{
+	width: 14%;
+}
+.cookie1_opt_noopt .cookie1_msg{
+	width: 100%;
+
+}
+.cookie1_opt_noopt .cookie1_action{
+	width: 0%;
+	display: none;
+}
+@-webkit-keyframes slide_left_open{
+	0%{left: -500px;}
+	70%{left: 50px;}
+	100%{left: 0px;}   
+}
+@keyframes slide_left_open{
+	0%{left: -500px;}
+	70%{left: 50px;}
+	100%{left: 0px;}  
+
+}
+
+@-webkit-keyframes slide_bottom_open{
+	0%{bottom: -90px;}
+	70%{bottom: 10px;}
+	100%{bottom: 0px;}   
+}
+@keyframes slide_bottom_open{
+	0%{bottom: -90px;}
+	70%{bottom: 10px;}
+	100%{bottom: 0px;}   
+
+}
+
+@-webkit-keyframes slide_right_closeCookie{
+	0%{left: 0px;}
+	100%{left: -500px;}  
+}
+@keyframes slide_right_closeCookie{
+	0%{left: 0px;}
+	100%{left: -500px;}  
+
+}
+
+@media handheld, screen and (max-width: 508px){
+	.cookie1{
+		bottom: 0px;
+		left: 0;
+		height: 50px;
+		
+		white-space: nowrap;
+		width: 100%;
+		padding-right: 30px;
+		padding-left: 10px;
+	}
+
+	.cookie1_opt_1opt .cookie1_msg{
+
+	width: calc(100% - 100px);text-overflow: ellipsis;
+
+}
+.cookie1_opt_1opt .cookie1_action{
+	width: 20%;
+}
+.cookie1_opt_2opt .cookie1_msg{
+	width: 60%;
+
+}
+.cookie1_opt_2opt .cookie1_action{
+	width: 20%;
+}
+
+.cookieopen1{
+		bottom: -90px;
+		animation-name: slide_bottom_open;
+		animation-duration: .4s;
+		-webkit-animation-duration: .4s;
+	}
+
+}
+	
