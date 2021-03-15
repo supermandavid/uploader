@@ -16,16 +16,15 @@ var ajax = new AjaxRequest()
 var cookieBar = new Cookie1()
 
 
-const ffprobePath = require('ffprobe-static');
+const ffprobeStatic = require('ffprobe-static');
 const ffmpegPath = require('ffmpeg-static');
 
 console.log('the paths are below')
-console.log(ffprobePath)
 console.log(ffmpegPath)
 
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
-ffmpeg.setFfprobePath(ffprobePath);
+ffmpeg.setFfprobePath(ffprobeStatic.path);
 
 
 var currentVideoData = null
@@ -482,7 +481,7 @@ function transcodeVideo() {
         "-hls_playlist_type vod",
         "-hls_flags independent_segments",
         "-master_pl_name playback.m3u8",
-        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts"),
+        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts") + ' ',
         "-strftime_mkdir 1",
         "-var_stream_map", "v:0,a:0 v:1,a:1 v:2,a:2"
     ]).output(path.join(transpath, 'stream_%v.m3u8'))
