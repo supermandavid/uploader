@@ -1,0 +1,43 @@
+{
+    "name": "uploader",
+    "productName":"Web Transcoder",
+    "version": "1.0.0",
+    "description": "Video Transcoder App",
+    "main": "main.js",
+    "scripts": {
+      "start": "electron .",
+      "dist": "electron-builder"
+    },
+    "build": {
+      "appId": "alexdacoda-transcoder",
+      "files": "!node_modules/ffprobe-static/**/*",
+        "win": {
+          "target": ["nsis"],
+          "icon":"img/icons/icon.ico",
+          "extraResources": {
+            "from": "node_modules/ffprobe-static/bin/win32/x64"
+          }
+        },
+        "nsis":{
+          "installerIcon": "img/icons/icon.ico",
+          "uninstallerIcon": "img/icons/icon.ico",
+          "uninstallDisplayName": "web Transcoder App",
+          "oneClick": false,
+          "allowToChangeInstallationDirectory":true
+        }
+      },
+    "keywords": [],
+    "author": "alexdacoda",
+    "license": "ISC",
+    "devDependencies": {
+      "electron": "11.3.0",
+      "electron-builder": "^22.10.5"
+    },
+    "dependencies": {
+      "archiver": "^5.3.0",
+      "electron-reload": "^1.5.0",
+      "ffmpeg-static": "^4.2.7",
+      "ffprobe-static": "^3.0.0",
+      "fluent-ffmpeg": "^2.1.2"
+    }
+  }

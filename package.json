@@ -1,25 +1,42 @@
 {
   "name": "uploader",
+  "productName": "Web Transcoder",
   "version": "1.0.0",
   "description": "Video Transcoder App",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "package-mac": "electron-packager . --overwrite --asar=true --platform=darwin --arch=x64 --icon=img/icons/icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . --overwrite --asar --platform=win32 --arch=x64 --icon=img/icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=alexdacoda --version-string.FileDescription=video transcoder for the web --version-string.ProductName=\"Video Transoder\"",
-    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=img/icons/icon.ico --prune=true --out=release-builds",
-    "create-installer-mac": "electron-installer-dmg ./release-builds/Video\\ Transcoder\\ app-darwin-x64/Video\\ Transcoder\\ app.app video-transoder-app --out=release-builds --overwrite --icon=img/icons/icon.icns",
-    "create-installer-win": "node installers/windows/createinstaller.js"
+    "dist": "electron-builder"
   },
-  "keywords": [
-    "Video",
-    "Transcoder"
-  ],
+  "build": {
+    "appId": "alexdacoda-transcoder",
+    "files": "!node_modules/ffprobe-static/**/*",
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/bin/${os}/${arch}/ffmpeg",
+      "node_modules/ffmpeg-static/index.js",
+      "node_modules/ffmpeg-static/package.json"
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "img/icons/icon.ico",
+      "extraResources": {
+        "from": "node_modules/ffprobe-static/bin/win32/x64"
+      }
+    },
+    "nsis":{
+      "installerIcon": "img/icons/icon.ico",
+      "uninstallerIcon": "img/icons/icon.ico",
+      "uninstallDisplayName": "web Transcoder App",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory":true
+    }
+  },
+  "keywords": [],
   "author": "alexdacoda",
   "license": "ISC",
   "devDependencies": {
     "electron": "11.3.0",
-    "electron-packager": "^15.2.0"
+    "electron-builder": "^22.10.5"
   },
   "dependencies": {
     "archiver": "^5.3.0",

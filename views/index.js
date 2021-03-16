@@ -15,16 +15,27 @@ var videoPlayerId = 'plyrele'
 var ajax = new AjaxRequest()
 var cookieBar = new Cookie1()
 
+var ffprobeStatic = ''
+if (!__dirname.includes('.asar')) { // If dev
+    ffprobeStatic = require('ffprobe-static').path
+} else { // if compiled
+  let ext = ''
+  if (process.platform === 'win32') ext = '.exe' // if windows
+  ffprobeStatic = path.join(process.resourcesPath + '/ffprobe' + ext)
+}
 
-const ffprobeStatic = require('ffprobe-static');
-const ffmpegPath = require('ffmpeg-static');
 
+const ffmpegPath = require('ffmpeg-static').replace(
+    'app.asar',
+    'app.asar.unpacked'
+);
 console.log('the paths are below')
 console.log(ffmpegPath)
+console.log(ffprobeStatic.path)
 
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath(ffmpegPath);
-ffmpeg.setFfprobePath(ffprobeStatic.path);
+ffmpeg.setFfprobePath(ffprobeStatic);
 
 
 var currentVideoData = null
@@ -421,9 +432,11 @@ function startTranscodeProcess(params) {
     console.log('the file dir is ')
     console.log(currentVideoData.fileDir)
     ffmpeg.ffprobe(currentVideoData.fileDir, (err, metaData) => {
-        currentVideoData.duration = Math.ceil(metaData.format.duration)
-
+        console.log('---------------error is----------------')
+        console.log(err)
+        console.log('---------------metadata----------------')
         console.log(metaData)
+        currentVideoData.duration = Math.ceil(metaData.format.duration)
 
         for (let i = 0; i < metaData.streams.length; i++) {
             if(typeof metaData.streams.height !== 'undefined'){
@@ -446,9 +459,11 @@ function transcodeVideo() {
     //const transpath = currentVideoData.transcodePath.replace(/(\s+)/g, '\\$1')
     const transpath = currentVideoData.transcodePath
 
+    //Todo: if there is a space in path add space at end of string also
+
     console.log(transpath)
     proc.addInput(currentVideoData.fileDir).outputOptions([
-        "-preset slow",
+        "-preset ultrafast",
         "-keyint_min 100",
         "-g 100",
         "-sc_threshold 0",
@@ -481,7 +496,7 @@ function transcodeVideo() {
         "-hls_playlist_type vod",
         "-hls_flags independent_segments",
         "-master_pl_name playback.m3u8",
-        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts"),
+        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts") + " ",
         "-strftime_mkdir 1",
         "-var_stream_map", "v:0,a:0 v:1,a:1 v:2,a:2"
     ]).output(path.join(transpath, 'stream_%v.m3u8'))
