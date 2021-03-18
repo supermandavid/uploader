@@ -23,12 +23,12 @@
         "from": "node_modules/ffprobe-static/bin/win32/x64"
       }
     },
-    "nsis":{
+    "nsis": {
       "installerIcon": "img/icons/icon.ico",
       "uninstallerIcon": "img/icons/icon.ico",
       "uninstallDisplayName": "web Transcoder App",
       "oneClick": false,
-      "allowToChangeInstallationDirectory":true
+      "allowToChangeInstallationDirectory": true
     }
   },
   "keywords": [],

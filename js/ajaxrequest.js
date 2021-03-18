@@ -145,7 +145,7 @@
 			const callbackFuncContext = (options.callbackContext != 'undefined') ?options.callbackContext: null;
 			const progress = (options.progressCallback != 'undefined') ?options.progressCallback: null;
 
-			console.log('the progress sent is')
+
 			this.post(target, callbackFunc, data, callbackFuncContext, progress);
 		}
 
@@ -196,14 +196,13 @@
 							precent: Math.ceil(e.loaded/e.total) * 100,
 							done: e.loaded,
 							total: e.total
-
 						};
-
+						console.log(progressData)
 						if (callbackContext === null) progress(progressData);
 						else progress.apply(cbcontext, progressData);
-							
 						
 					}, false);
+					
 				}else{
 					console.log('no progress working')
 				}

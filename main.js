@@ -82,7 +82,8 @@ app.on('window-all-closed', () => {
 })*/
 
 ipc.on('signup-state', function (event, arg ) {
-    win.webContents.send('sign-state ', argcl)
+    win.webContents.send('sign-state ', argcl) 
+
 })
 
 

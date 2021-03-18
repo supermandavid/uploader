@@ -3,14 +3,16 @@ const path = require('path')
 const os = require('os')
 const fs = require("fs");
 
+
 var archiver = require('archiver');
-const { Certificate } = require('crypto');
-const { get } = require('https');
+
+
 const remote = electron.remote
 var currentVideo = null;
 var ipc = electron.ipcRenderer
 var session = require('electron')
 var app = remote.app
+
 var videoPlayerId = 'plyrele'
 var ajax = new AjaxRequest()
 var cookieBar = new Cookie1()
@@ -19,9 +21,9 @@ var ffprobeStatic = ''
 if (!__dirname.includes('.asar')) { // If dev
     ffprobeStatic = require('ffprobe-static').path
 } else { // if compiled
-  let ext = ''
-  if (process.platform === 'win32') ext = '.exe' // if windows
-  ffprobeStatic = path.join(process.resourcesPath + '/ffprobe' + ext)
+    let ext = ''
+    if (process.platform === 'win32') ext = '.exe' // if windows
+    ffprobeStatic = path.join(process.resourcesPath + '/ffprobe' + ext)
 }
 
 
@@ -41,7 +43,7 @@ ffmpeg.setFfprobePath(ffprobeStatic);
 var currentVideoData = null
 var videoSelectedState = false
 var imageSelectedState = false
-var imageBase64String = null 
+var imageBase64String = null
 var muted = false
 var firstPlay = false
 var inputSuspended = false;
@@ -93,8 +95,8 @@ const default_reg_file = {
     name: "Transcode Registry",
     appkpp: "",
     mixer: "",
-    wan:"",
-    lan:"",
+    wan: "",
+    lan: "",
     last_updated: 0,
     transcodes: {
 
@@ -122,7 +124,7 @@ const transcodeDataModel = {
 //action for button
 actionButton.addEventListener('click', function (event) {
 
-    
+
     if (inputSuspended) return
     if (progressData.video[1] && !transcoded) {
         if (!isTranscoding) {
@@ -200,12 +202,25 @@ function sendNotification(title, body) {
     const notification = new window.Notification(title, notificationData)
 }
 
-function getFile(path, encoding = "utf8") {
+function getFile(path, encoding = "utf8", type = 0) {
     if (fs.existsSync(path)) {
-        return encoding == null ? fs.readFileSync(path) :fs.readFileSync(path, 'utf8')
+            if(type == 0){
+
+                return encoding == null ? fs.readFileSync(path) : fs.readFileSync(path, encoding)
+            }else{
+                console.log('zip path is === ' + path)
+                let buffer = Buffer.from(path);
+                let arraybuffer = Uint8Array.from(buffer).buffer;
+                const blob = new Blob([fs.readFileSync(path)],{type: 'application/zip'})
+                //let blob  = new Blob(new Uint8Array(arraybuffer), {type: 'application/zip'});
+
+
+                return blob;
+            }
+                    
+        
     }
     else return null
-
 }
 
 
@@ -376,16 +391,16 @@ function deleteResidualFiles() {
 
 }
 
-function getDb(){
+function getDb() {
     const appPath = ([electron].app || electron.remote.app).getPath('userData');
-    const transcodePath = path.join(appPath, 'transcodes') 
+    const transcodePath = path.join(appPath, 'transcodes')
     const dbfile = transcodePath + 'trans_reg.json'
 
     if (!fs.existsSync(transcodePath)) fs.mkdirSync(transcodePath)
 
     //adding registery to json file
     let reg;
-    
+
     if ((reg = getFile(dbfile)) === null) {
         const defaultJSON = JSON.stringify(default_reg_file)
         saveFile(dbfile, defaultJSON)
@@ -401,14 +416,14 @@ function getDb(){
 function registerVideo(filepath) {
 
     const appPath = (electron.app || electron.remote.app).getPath('userData');
-    const transcodePath = path.join(appPath, 'transcodes') 
+    const transcodePath = path.join(appPath, 'transcodes')
     const time = Date.now()
     const videoId = 'vid_' + time
     const transcodeVideoPath = path.join(transcodePath, videoId)
     const dbfile = path.join(transcodePath, 'trans_reg.json')
     if (!fs.existsSync(transcodePath)) fs.mkdirSync(transcodePath)
     if (!fs.existsSync(transcodeVideoPath)) fs.mkdirSync(transcodeVideoPath)
-    
+
 
     //adding registery to json file
     reg = getDb()
@@ -439,12 +454,12 @@ function startTranscodeProcess(params) {
         currentVideoData.duration = Math.ceil(metaData.format.duration)
 
         for (let i = 0; i < metaData.streams.length; i++) {
-            if(typeof metaData.streams.height !== 'undefined'){
-                currentVideoData.height = metaData.streams.height
-                currentVideoData.width = metaData.streams.width
+            if (typeof metaData.streams[i].height !== 'undefined') {
+                currentVideoData.height = metaData.streams[i].height
+                currentVideoData.width = metaData.streams[i].width
                 break
             }
-            
+
         }
 
         transcodeVideo()
@@ -455,7 +470,7 @@ function transcodeVideo() {
 
 
     var proc = new ffmpeg()
-   
+
     //const transpath = currentVideoData.transcodePath.replace(/(\s+)/g, '\\$1')
     const transpath = currentVideoData.transcodePath
 
@@ -496,7 +511,7 @@ function transcodeVideo() {
         "-hls_playlist_type vod",
         "-hls_flags independent_segments",
         "-master_pl_name playback.m3u8",
-        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts") + " ",
+        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts"),
         "-strftime_mkdir 1",
         "-var_stream_map", "v:0,a:0 v:1,a:1 v:2,a:2"
     ]).output(path.join(transpath, 'stream_%v.m3u8'))
@@ -593,6 +608,7 @@ function prepareManifestFiles() {
 
 function packageManifestFiles() {
     currentVideoData.package = path.join(currentVideoData.transcodeHome, currentVideoData.videoId + '.zip')
+    currentVideoData.packageName = currentVideoData.videoId + '.zip';
     console.log(currentVideoData.package)
     const output = fs.createWriteStream(currentVideoData.package);
     const archive = archiver('zip', {
@@ -624,71 +640,69 @@ function packageManifestFiles() {
 
 }
 
-function uploadProgress(data){
-    console.trace()
-    console.log('progress data')
-    console.log(data);
+function uploadProgress(data) {
+   alert(data)
+   
 }
 
 
-function loginAction(data){
-    if(askedToLogin)return;
+function loginAction(data) {
+    if (askedToLogin) return;
     askedToLogin = true;
     const loginModalHolder = document.querySelector('#login_hldr');
     const loginModal = loginModalHolder.content;
-    
-    const cookieBar = (window.cookieBarContext)?window.cookieBarContext : new Cookie1();
+
+    const cookieBar = (window.cookieBarContext) ? window.cookieBarContext : new Cookie1();
     cookieBar.alert("Please Sign in to Continue");
 
-    if(!logininit){
+    if (!logininit) {
         logininit = true;
         const btn = loginModal.querySelector("[func='login']")
-        btn.addEventListener("click", function(){
+        btn.addEventListener("click", function () {
             dolsbmt();
-          });
+        });
 
     }
 
-    setTimeout(function(){ if (loginModal) {
-        window.loginModal = loginModal;
-        document.body.appendChild(window.loginModal);
-    }
- }, 1000);
+    setTimeout(function () {
+        if (loginModal) {
+            window.loginModal = loginModal;
+            document.body.appendChild(window.loginModal);
+        }
+    }, 1000);
 
 }
 
 function startUploadProcess() {
     suspendInputs()
-    const target = 'http://api.hello.coda/save/video'
+    const target = 'https://vup.helloloveworld.net/save/video'
     const formData = new FormData()
 
     let db = getDb()
-    
+
     //let apiKey = window.enc.drm(db.appkpp, db.mixer)
     let apiKey = "hello_api"
 
+    const blob = getFile(currentVideoData.package, 'application/zip', 1)
 
-    const file = getFile(currentVideoData.package)
-    let buffer = Buffer.from(file);
-    let arraybuffer = Uint8Array.from(buffer).buffer;
-    let blob  = new Blob([new Uint8Array(arraybuffer)]);
+    console.log(currentVideoData)
 
     formData.append('title', document.getElementById('rtit').value)
     formData.append('caption', document.getElementById('ctit').value)
     formData.append('duration', currentVideoData.duration)
     formData.append('width', currentVideoData.width)
+    formData.append('from', 'api')
     formData.append('height', currentVideoData.height)
     formData.append('master', 'playback.m3u8')
     formData.append('thumb', 'thumb.txt')
     formData.append('token', apiKey)
-    formData.append('video', blob, 'package.zip')
-
+    formData.append('video', blob, currentVideoData.videoId+'.zip')
 
 
 
     const options = {
-         callback:processResult,
-         progressCallback: uploadProgress
+        callback: processResult,
+        progressCallback: uploadProgress
     }
 
     window.cookieBarContext.progress("Starting Upload...")
@@ -698,6 +712,7 @@ function startUploadProcess() {
 
 
 function processResult(data) {
+
     let res = data;
     let index = res['i'];
     console.log('the result to process is');
@@ -709,20 +724,21 @@ function processResult(data) {
         } else {
             if (window.cookieBarContext) window.cookieBarContext.alert('An Unexpected Error Occoured');
         }
-
+    }else{
+        window.cookieBarContext.progressDone()
+        window.cookieBarContext.hotSwap('Done Uploading Data')
     }
-
 
 
 
 }
 
-function suspendInputs(state = true){
+function suspendInputs(state = true) {
     inputSuspended = true
     const inps = document.getElementsByClassName('fhldr_inp');
 
     for (let i = 0; i < inps.length; i++) {
-        inps[i].readOnly = state? 'readonly' : false
+        inps[i].readOnly = state ? 'readonly' : false
     }
 
 
@@ -764,13 +780,12 @@ function fieldChanged(e) {
 }
 
 function dolsbmt() {
-    if (loginRequestActive){
+    if (loginRequestActive) {
         return;
-    }else{
+    } else {
         loginRequestActive = true;
     }
     let error = 0;
-
 
     const ps = document.querySelector("#lg_pass").value;
     const pu = document.querySelector("#lg_usr").value;
@@ -781,15 +796,15 @@ function dolsbmt() {
     const ps_mst = document.querySelector("#pass_msg");
     const pu_msg = document.querySelector("#usr_msg");
 
-    if (pu.length < 3){
+    if (pu.length < 3) {
         window.cookieBarContext.alert('Please Enter a valid username');
 
         error++;
-    } 
+    }
 
-    if(ps.length < 3){
+    if (ps.length < 3) {
         //trigger no error on password
-        
+
         //window.cookieBarContext.alert('Please Enter a Valid Password');
         //error++;
     }
@@ -808,20 +823,20 @@ function dolsbmt() {
             callback: checkLoginSuccessful
         }
 
-        const target = 'http://api.hello.coda/login/auth.php'
+        const target = 'https://api.helloloveworld.net/login/auth.php'
 
         ajax.postRequest(target, formdata, options);
     } else {
-        
+
         loginRequestActive = false;
         return;
 
     }
 }
 
-function checkLoginSuccessful(data){
-    let db = getDB()
-    if (typeof(data) == 'object') {
+function checkLoginSuccessful(data) {
+    let db = getDb()
+    if (typeof (data) == 'object') {
         if (data['error'] == '0') {
             //this loop finds the device id in the result actions list
             for (let i = 0; i < data['actions'].length; i++) {
@@ -829,28 +844,28 @@ function checkLoginSuccessful(data){
                     const ivalue = data['actions'][i]['data'];
 
 
-                    const cookie = { url: 'http://api.hello.coda', name: 'id_value', value: ivalue, expirationDate: getTime() + 31556952}
+                    const cookie = { url: 'https://api.helloloveworld.net', name: 'id_value', value: ivalue, expirationDate: getTime() + 31556952 }
                     session.defaultSession.cookies.set(cookie)
-                    .then(() => {
-                        // success
-                    }, (error) => {
-                        console.error(error)
-                    })
-                    
+                        .then(() => {
+                            // success
+                        }, (error) => {
+                            console.error(error)
+                        })
 
-                }else if (data['actions'][i]['mark'] == 'session_id') {
+
+                } else if (data['actions'][i]['mark'] == 'session_id') {
                     const sesid = data['actions'][i]['data'];
                     window.cookieContext.set('PHPSESSID', sesid);
 
-                    const cookie = { url: 'http://api.hello.coda', name: 'PHPSESSID', value: sesid, expirationDate: getTime() + 31556952}
+                    const cookie = { url: 'https://api.helloloveworld.net', name: 'PHPSESSID', value: sesid, expirationDate: getTime() + 31556952 }
                     session.defaultSession.cookies.set(cookie)
-                    .then(() => {
-                        // success
-                    }, (error) => {
-                        console.error(error)
-                    })
+                        .then(() => {
+                            // success
+                        }, (error) => {
+                            console.error(error)
+                        })
                 }
-                
+
             }
             //end
 
@@ -863,25 +878,27 @@ function checkLoginSuccessful(data){
             }
 
 
-            
+
 
         } else if (data['error'] == '1') {
             window.cookieBarContext.remove();
-            setTimeout(function(){
-                  window.cookieBarContext.alert(data['error_msg']);  
-                
+            setTimeout(function () {
+                window.cookieBarContext.alert(data['error_msg']);
+
             }, 500);
 
 
         }
     } else {
-       console.log('data');
+        console.log('data');
         requestuserid('an unexpected Error occoured');
     }
 }
 
-function removeLoginModal(){
-    if(!window.loginModal) return;
+
+
+function removeLoginModal() {
+    if (!window.loginModal) return;
 
 
     //temporary solution remove
@@ -894,7 +911,7 @@ function removeLoginModal(){
     const loginModalHolder = document.querySelector('#login_hldr');
 
     loginModalHolder.appendChild(window.loginModal);
-    
+
 
     delete window.loginModal;
 }
