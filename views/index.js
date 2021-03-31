@@ -436,7 +436,7 @@ function registerVideo(filepath) {
         transcodeTime: 0,
         transcodeState: 0
     };
-
+    
     saveFile(dbfile, JSON.stringify(reg));
     //alert(reg.transcodes[videoId])
     return reg.transcodes[videoId];
@@ -473,12 +473,14 @@ function transcodeVideo() {
 
     //const transpath = currentVideoData.transcodePath.replace(/(\s+)/g, '\\$1')
     const transpath = currentVideoData.transcodePath
+    const extra = (os.platform() == 'win32')? " ": "";
 
     //Todo: if there is a space in path add space at end of string also
 
+
     console.log(transpath)
     proc.addInput(currentVideoData.fileDir).outputOptions([
-        "-preset ultrafast",
+        "-preset slow",
         "-keyint_min 100",
         "-g 100",
         "-sc_threshold 0",
@@ -511,7 +513,7 @@ function transcodeVideo() {
         "-hls_playlist_type vod",
         "-hls_flags independent_segments",
         "-master_pl_name playback.m3u8",
-        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts"),
+        "-hls_segment_filename", path.join(transpath, "s_%v_%06d.ts") + extra,
         "-strftime_mkdir 1",
         "-var_stream_map", "v:0,a:0 v:1,a:1 v:2,a:2"
     ]).output(path.join(transpath, 'stream_%v.m3u8'))
@@ -676,6 +678,7 @@ function loginAction(data) {
 function startUploadProcess() {
     suspendInputs()
     const target = 'https://vup.helloloveworld.net/save/video'
+    //const target = 'http://api.hello.coda/save/video'
     const formData = new FormData()
 
     let db = getDb()
@@ -824,6 +827,7 @@ function dolsbmt() {
         }
 
         const target = 'https://api.helloloveworld.net/login/auth.php'
+        //const target = 'http://api.hello.coda/login/auth.php'
 
         ajax.postRequest(target, formdata, options);
     } else {
@@ -844,7 +848,7 @@ function checkLoginSuccessful(data) {
                     const ivalue = data['actions'][i]['data'];
 
 
-                    const cookie = { url: 'https://api.helloloveworld.net', name: 'id_value', value: ivalue, expirationDate: getTime() + 31556952 }
+                    const cookie = { url: 'https://helloloveworld.net', name: 'id_value', value: ivalue, expirationDate: getTime() + 31556952 }
                     session.defaultSession.cookies.set(cookie)
                         .then(() => {
                             // success
@@ -855,7 +859,6 @@ function checkLoginSuccessful(data) {
 
                 } else if (data['actions'][i]['mark'] == 'session_id') {
                     const sesid = data['actions'][i]['data'];
-                    window.cookieContext.set('PHPSESSID', sesid);
 
                     const cookie = { url: 'https://api.helloloveworld.net', name: 'PHPSESSID', value: sesid, expirationDate: getTime() + 31556952 }
                     session.defaultSession.cookies.set(cookie)

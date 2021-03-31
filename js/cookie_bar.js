@@ -203,7 +203,6 @@
 
 				this.cookieState = true;
 
-
 				if (this.options.flypass === true) {
 					var context = this;
 					var duration = this.options.duration * 1000;
