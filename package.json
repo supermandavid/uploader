@@ -1,7 +1,7 @@
 {
   "name": "uploader",
   "productName": "Web Transcoder",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Video Transcoder App",
   "main": "main.js",
   "scripts": {
@@ -17,7 +17,9 @@
       "node_modules/ffmpeg-static/package.json"
     ],
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "icon": "img/icons/icon.ico",
       "extraResources": {
         "from": "node_modules/ffprobe-static/bin/win32/x64"

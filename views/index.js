@@ -36,6 +36,7 @@ console.log(ffmpegPath)
 console.log(ffprobeStatic.path)
 
 const ffmpeg = require('fluent-ffmpeg');
+const { timeStamp } = require('console');
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobeStatic);
 
@@ -559,11 +560,18 @@ function cleanManifestFiles() {
     for (let i = 0; i < manifestFiles.length; i++) {
         const fileDir = manifestFiles[i]
 
+
         fs.readFile(fileDir, 'utf8', function (err, data) {
+            var result = "";
+
             if (err) {
                 return console.log(err);
             }
-            var result = data.replaceAll(path + "/", './');
+
+
+            result = data.replaceAll(path + "/", './');
+            result = data.replaceAll(path + "\\", './');
+
 
             fs.writeFile(fileDir, result, 'utf8', function (err) {
                 if (err) return console.log(err);
@@ -677,9 +685,9 @@ function loginAction(data) {
 
 function startUploadProcess() {
     suspendInputs()
-    const target = 'https://vup.helloloveworld.net/save/video'
+    const target = 'https://vup.helloloveworld.tv/save/video'
     //const target = 'http://api.hello.coda/save/video'
-    const formData = new FormData()
+    const formData = new FormData();
 
     let db = getDb()
 
@@ -702,11 +710,11 @@ function startUploadProcess() {
     formData.append('video', blob, currentVideoData.videoId+'.zip')
 
 
-
     const options = {
         callback: processResult,
         progressCallback: uploadProgress
     }
+    
 
     window.cookieBarContext.progress("Starting Upload...")
     ajax.postRequest(target, formData, options)
@@ -826,7 +834,7 @@ function dolsbmt() {
             callback: checkLoginSuccessful
         }
 
-        const target = 'https://api.helloloveworld.net/login/auth.php'
+        const target = 'https://api.helloloveworld.tv/login/auth.php'
         //const target = 'http://api.hello.coda/login/auth.php'
 
         ajax.postRequest(target, formdata, options);
@@ -848,7 +856,9 @@ function checkLoginSuccessful(data) {
                     const ivalue = data['actions'][i]['data'];
 
 
-                    const cookie = { url: 'https://helloloveworld.net', name: 'id_value', value: ivalue, expirationDate: getTime() + 31556952 }
+                    
+                    const cookie = { url: 'https://helloloveworld.tv', name: 'id_value', value: ivalue, expirationDate: getTime() + 31556952 }
+                    //const cookie = { url: 'http://hello.coda', name: 'id_value', value: ivalue, expirationDate: getTime() + 31556952 }
                     session.defaultSession.cookies.set(cookie)
                         .then(() => {
                             // success
@@ -860,7 +870,9 @@ function checkLoginSuccessful(data) {
                 } else if (data['actions'][i]['mark'] == 'session_id') {
                     const sesid = data['actions'][i]['data'];
 
-                    const cookie = { url: 'https://api.helloloveworld.net', name: 'PHPSESSID', value: sesid, expirationDate: getTime() + 31556952 }
+                    const cookie = { url: 'https://helloloveworld.tv', name: 'PHPSESSID', value: sesid, expirationDate: getTime() + 31556952 }
+                    //const cookie = { url: 'http://hello.coda', name: 'PHPSESSID', value: sesid, expirationDate: getTime() + 31556952 }
+                   
                     session.defaultSession.cookies.set(cookie)
                         .then(() => {
                             // success
