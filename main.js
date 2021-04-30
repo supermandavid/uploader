@@ -20,7 +20,7 @@ function createWindow () {
   })
 
   win.loadFile('views/index.html')
-  win.openDevTools()
+  //win.openDevTools()
 
 
   var menu = Menu.buildFromTemplate([
