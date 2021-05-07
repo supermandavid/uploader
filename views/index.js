@@ -651,8 +651,11 @@ function packageManifestFiles() {
 }
 
 function uploadProgress(data) {
-   alert(data)
    
+    //const percent = ceil(data)
+    window.cookieBarContext.hotSwap('Uploading... ' + data.percent + '%');
+
+
 }
 
 
